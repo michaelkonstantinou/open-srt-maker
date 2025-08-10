@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {Button} from "@/components/ui/button";
-import { Pencil, Save } from "lucide-vue-next"
+import { Pencil, Save, Trash } from "lucide-vue-next"
 import SubtitleItem from "@/types/SubtitleItem.ts";
 import {ref, watch} from "vue";
 import { Label } from "@/components/ui/label";
@@ -19,7 +19,9 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
-})
+});
+
+const emit = defineEmits(['removed']);
 
 let isInEditMode = ref(props.globalEdit)
 
@@ -27,6 +29,10 @@ const toggleEdit = () => {
   if (!props.globalEdit) {
     isInEditMode.value = !(isInEditMode.value)
   }
+}
+
+const remove = () => {
+  emit('removed', props.item.id)
 }
 
 watch(
@@ -67,20 +73,28 @@ watch(
       </div>
     </div>
     <div v-show="!isInEditMode">
-      <p class="text-sm text-gray-800">{{ item.toTimeRange()}}</p>
+      <p class="text-sm text-gray-800">{{ item.toTimeRange() }}</p>
       <p class="text-gray-600">{{ item.getContentText() }}</p>
     </div>
-    <Button v-if="!globalEdit"
-            @click="toggleEdit"
-            class="px-3 py-1 text-white text-sm"
-            :class="{
+    <div class="flex gap-1.5">
+      <Button v-if="!globalEdit"
+              @click="toggleEdit"
+              class="px-3 py-1 text-white text-sm"
+              :class="{
               'bg-yellow-500 hover:bg-yellow-600': !isInEditMode,
               'bg-blue-500 hover:bg-blue-600': isInEditMode
             }">
 
-      <Pencil v-show="!isInEditMode"/>
-      <Save v-show="isInEditMode"/>
-    </Button>
+        <Pencil v-show="!isInEditMode"/>
+        <Save v-show="isInEditMode"/>
+      </Button>
+      <Button v-if="!globalEdit && !isInEditMode"
+              @click="remove"
+              class="px-3 py-1 text-white text-sm bg-red-500 hover:bg-red-600">
+        <Trash />
+      </Button>
+    </div>
+
   </li>
 </template>
 

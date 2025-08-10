@@ -23,6 +23,7 @@ function updateTimestamp(value: number) {
           <input
               type="text"
               v-model="projectTitle"
+              @keydown.enter="isInEditMode = false"
               class="border border-gray-300 rounded-lg px-3 py-1.5 text-lg font-medium
              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
              shadow-sm"
@@ -69,7 +70,3 @@ function updateTimestamp(value: number) {
     <SubtitleEditor :currentTimestamp="currentTimestamp"/>
   </div>
 </template>
-
-<style scoped>
-
-</style>

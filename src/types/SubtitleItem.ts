@@ -1,16 +1,16 @@
 import {formatTime} from "@/utils/timeUtils.ts";
 
 export default class SubtitleItem {
+    id: number;
     startingTimestamp: number;
     endingTimestamp: number;
     content: string;
-    orderId: number;
 
-    constructor(startingTimestamp: number, endingTimestamp: number, content: string, orderId: number = 1) {
+    constructor(startingTimestamp: number, endingTimestamp: number, content: string, id: number = 1) {
         this.startingTimestamp = startingTimestamp;
         this.endingTimestamp = endingTimestamp;
         this.content = content;
-        this.orderId = orderId;
+        this.id = id;
     }
 
     /**

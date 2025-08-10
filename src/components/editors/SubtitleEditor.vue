@@ -14,13 +14,17 @@ const props = defineProps({
     required: false,
   }
 })
-const subtitleItems: Ref<SubtitleItem[]> = ref(new Array(new SubtitleItem(5000, 10000, "Hello")));
+const subtitleItems: Ref<SubtitleItem[]> = ref(new Array(new SubtitleItem(5000, 10000, "Hello", 1)));
 const isGlobalEditEnabled: Ref<Boolean> = ref(false);
 
 function addNewItem() {
   subtitleItems.value.push(
       new SubtitleItem(props.currentTimestamp, props.currentTimestamp + 2000, "", subtitleItems.value.length + 1)
   )
+}
+
+function removeItem(itemId: number) {
+  subtitleItems.value = subtitleItems.value.filter(el => el.id !== itemId)
 }
 </script>
 
@@ -53,7 +57,7 @@ function addNewItem() {
 
     <h2 class="text-lg font-semibold mb-4 text-gray-700">!Subtitles</h2>
     <ul class="divide-y divide-gray-200">
-      <SubtitleEditorRecord v-for="item in subtitleItems" :item="item" :key="item.orderId" :globalEdit="isGlobalEditEnabled"/>
+      <SubtitleEditorRecord v-for="item in subtitleItems" :item="item" :key="item.id" :globalEdit="isGlobalEditEnabled" @removed="removeItem"/>
     </ul>
   </Card>
 </template>
