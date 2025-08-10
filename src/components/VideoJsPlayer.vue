@@ -1,12 +1,12 @@
 <template>
   <video ref="elVideoPlayer" class="video-js"></video>
-  {{ player?.currentTime}}
 </template>
 
 <script setup lang="ts">
 import videojs from 'video.js';
 import {onBeforeUnmount, onMounted, useTemplateRef} from "vue";
 import type Player from "video.js/dist/types/player";
+import {ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem} from "@/components/ui/context-menu";
 
 const props = defineProps({
   src: {

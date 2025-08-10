@@ -1,38 +1,51 @@
 <script setup lang="ts">
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
+import OpenSRTProject from "@/types/OpenSRTProject.ts";
+
+const props = defineProps({
+  project: {
+    type: OpenSRTProject,
+    required: true,
+  }
+});
+
+function exportSrtFile() {
+  console.log(props.project.subtitleItems)
+}
 </script>
 
 <template>
-  <NavigationMenu>
-    <NavigationMenuList>
-      <NavigationMenuItem>
-        <NavigationMenuTrigger>File</NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <NavigationMenuLink>Import .SRT</NavigationMenuLink>
-          <NavigationMenuLink>Export as .SRT</NavigationMenuLink>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuTrigger>Video</NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <NavigationMenuLink>Upload</NavigationMenuLink>
-          <NavigationMenuLink>Use external url</NavigationMenuLink>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-        <NavigationMenuItem>
-        <NavigationMenuTrigger>Project</NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <NavigationMenuLink>Settings</NavigationMenuLink>
-          <NavigationMenuLink>Delete</NavigationMenuLink>
-        </NavigationMenuContent>
-        </NavigationMenuItem>
-    </NavigationMenuList>
-  </NavigationMenu>
+  <Menubar>
+    <MenubarMenu>
+      <MenubarTrigger>File</MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem>Import file</MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem>Export as...</MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem @click="exportSrtFile">Export .SRT</MenubarItem>
+        <MenubarItem>Export .VTT</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger>Video</MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem>Set video url</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger>Project</MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem>Create copy</MenubarItem>
+        <MenubarItem>Delete project</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  </Menubar>
 </template>

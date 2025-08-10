@@ -3,13 +3,25 @@ import { Save } from "lucide-vue-next"
 import {ref} from "vue";
 import SubtitleEditor from "@/components/editors/SubtitleEditor.vue";
 import VideoJsPlayer from "@/components/VideoJsPlayer.vue";
+import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@/components/ui/context-menu";
+import OpenSRTProject from "@/types/OpenSRTProject.ts";
 
-const projectTitle = ref("Untitled Project");
+const props = defineProps({
+  project: {
+    type: OpenSRTProject,
+    required: true,
+  }
+});
+
 let isInEditMode = ref(false)
 let currentTimestamp = ref(0)
 
 function updateTimestamp(value: number) {
   currentTimestamp.value = value * 1000
+}
+
+function removeItem(id: Number) {
+  props.project.removeItemById(id);
 }
 </script>
 
@@ -22,7 +34,7 @@ function updateTimestamp(value: number) {
           <!-- Input for editing title -->
           <input
               type="text"
-              v-model="projectTitle"
+              v-model="project.name"
               @keydown.enter="isInEditMode = false"
               class="border border-gray-300 rounded-lg px-3 py-1.5 text-lg font-medium
              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
@@ -39,7 +51,7 @@ function updateTimestamp(value: number) {
 
       <div v-if="!isInEditMode" class="group flex items-center gap-2">
         <h1 class="text-3xl font-bold text-gray-800">
-          {{ projectTitle }}
+          {{ project.name }}
         </h1>
         <button @click="isInEditMode = !isInEditMode"
                 class="opacity-0 group-hover:opacity-100 transition-opacity duration-200
@@ -62,11 +74,22 @@ function updateTimestamp(value: number) {
 
     <!-- Video Placeholder -->
     <div class="w-full max-w-4xl mb-4">
-      <div class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
-        <VideoJsPlayer src="https://vjs.zencdn.net/v/oceans.mp4" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
+      <div>
+        <ContextMenu>
+          <ContextMenuTrigger class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
+            <VideoJsPlayer src="https://vjs.zencdn.net/v/oceans.mp4" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem @click="console.log('sth')">Add text here</ContextMenuItem>
+            <ContextMenuItem>Remove current text(s)</ContextMenuItem>
+            <ContextMenuItem>Team</ContextMenuItem>
+            <ContextMenuItem>Subscription</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+
       </div>
     </div>
 
-    <SubtitleEditor :currentTimestamp="currentTimestamp"/>
+    <SubtitleEditor :currentTimestamp="currentTimestamp" :items="project.subtitleItems" @remove="removeItem"/>
   </div>
 </template>

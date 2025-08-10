@@ -10,4 +10,8 @@ export default class OpenSRTProject {
         this.name = name;
         this.subtitleItems = subtitleItems;
     }
+
+    public removeItemById(id: Number) {
+        this.subtitleItems = this.subtitleItems.filter(el => el.id !== id);
+    }
 }

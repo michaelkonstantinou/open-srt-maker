@@ -12,20 +12,26 @@ const props = defineProps({
     type: Number,
     default: 0,
     required: false,
+  },
+  items: {
+    type: Array<SubtitleItem>,
+    required: true,
   }
 })
-const subtitleItems: Ref<SubtitleItem[]> = ref(new Array(new SubtitleItem(5000, 10000, "Hello", 1)));
+
+const emit = defineEmits(['remove']);
 const isGlobalEditEnabled: Ref<Boolean> = ref(false);
 
 function addNewItem() {
-  subtitleItems.value.push(
-      new SubtitleItem(props.currentTimestamp, props.currentTimestamp + 2000, "", subtitleItems.value.length + 1)
+  props.items.push(
+      new SubtitleItem(props.currentTimestamp, props.currentTimestamp + 2000, "", props.items.length + 1)
   )
 }
 
-function removeItem(itemId: number) {
-  subtitleItems.value = subtitleItems.value.filter(el => el.id !== itemId)
+function removeItem(id: Number) {
+  emit('remove', id);
 }
+
 </script>
 
 <template>
@@ -57,7 +63,7 @@ function removeItem(itemId: number) {
 
     <h2 class="text-lg font-semibold mb-4 text-gray-700">!Subtitles</h2>
     <ul class="divide-y divide-gray-200">
-      <SubtitleEditorRecord v-for="item in subtitleItems" :item="item" :key="item.id" :globalEdit="isGlobalEditEnabled" @removed="removeItem"/>
+      <SubtitleEditorRecord v-for="item in items" :item="item" :key="item.id" :globalEdit="isGlobalEditEnabled" @removed="removeItem"/>
     </ul>
   </Card>
 </template>

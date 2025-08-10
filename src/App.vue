@@ -10,6 +10,12 @@ import TheSidebar from "@/layout/TheSidebar.vue";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import TheEditor from "@/components/TheEditor.vue";
 import TheNavbar from "@/layout/TheNavbar.vue";
+import {ref, type Ref} from "vue";
+import OpenSRTProject from "@/types/OpenSRTProject.ts";
+import SubtitleItem from "@/types/SubtitleItem.ts";
+
+const items = new Array(new SubtitleItem(5000, 10000, "Made using OpenSRTMaker", 1))
+const project: Ref<OpenSRTProject> = ref(new OpenSRTProject(1, "Untitled Project", items));
 </script>
 
 <template>
@@ -20,11 +26,11 @@ import TheNavbar from "@/layout/TheNavbar.vue";
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
           <Separator orientation="vertical" class="mr-2 h-4" />
-          <TheNavbar />
+          <TheNavbar :project="project" />
         </div>
       </header>
       <div class="gap-4 p-4 pt-0">
-        <TheEditor />
+        <TheEditor :project="project" />
 <!--        <div class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />-->
       </div>
     </SidebarInset>
