@@ -2,10 +2,15 @@
 import { Save } from "lucide-vue-next"
 import {ref} from "vue";
 import SubtitleEditor from "@/components/editors/SubtitleEditor.vue";
+import VideoJsPlayer from "@/components/VideoJsPlayer.vue";
 
 const projectTitle = ref("Untitled Project");
 let isInEditMode = ref(false)
+let currentTimestamp = ref(0)
 
+function updateTimestamp(value: number) {
+  currentTimestamp.value = value
+}
 </script>
 
 <template>
@@ -55,9 +60,9 @@ let isInEditMode = ref(false)
     </div>
 
     <!-- Video Placeholder -->
-    <div class="w-full max-w-3xl mb-4">
-      <div class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow">
-        <span class="text-gray-600">Video Placeholder</span>
+    <div class="w-full max-w-4xl mb-4">
+      <div class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
+        <VideoJsPlayer src="https://vjs.zencdn.net/v/oceans.mp4" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
       </div>
     </div>
 

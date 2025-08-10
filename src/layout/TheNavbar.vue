@@ -1,29 +1,38 @@
 <script setup lang="ts">
 import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from '@/components/ui/menubar'
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu'
 </script>
 
 <template>
-  <Menubar>
-    <MenubarMenu>
-      <MenubarTrigger>File</MenubarTrigger>
-      <MenubarContent>
-        <MenubarItem>
-          New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-        </MenubarItem>
-        <MenubarItem>New Window</MenubarItem>
-        <MenubarSeparator />
-        <MenubarItem>Share</MenubarItem>
-        <MenubarSeparator />
-        <MenubarItem>Print</MenubarItem>
-      </MenubarContent>
-    </MenubarMenu>
-  </Menubar>
+  <NavigationMenu>
+    <NavigationMenuList>
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>File</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <NavigationMenuLink>Import .SRT</NavigationMenuLink>
+          <NavigationMenuLink>Export as .SRT</NavigationMenuLink>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Video</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <NavigationMenuLink>Upload</NavigationMenuLink>
+          <NavigationMenuLink>Use external url</NavigationMenuLink>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+        <NavigationMenuItem>
+        <NavigationMenuTrigger>Project</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <NavigationMenuLink>Settings</NavigationMenuLink>
+          <NavigationMenuLink>Delete</NavigationMenuLink>
+        </NavigationMenuContent>
+        </NavigationMenuItem>
+    </NavigationMenuList>
+  </NavigationMenu>
 </template>

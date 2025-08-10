@@ -9,6 +9,7 @@ export const containerClass = "w-full h-full"
 import TheSidebar from "@/layout/TheSidebar.vue";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import TheEditor from "@/components/TheEditor.vue";
+import TheNavbar from "@/layout/TheNavbar.vue";
 </script>
 
 <template>
@@ -19,19 +20,7 @@ import TheEditor from "@/components/TheEditor.vue";
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
           <Separator orientation="vertical" class="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Building Your Application
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator class="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <TheNavbar />
         </div>
       </header>
       <div class="gap-4 p-4 pt-0">
