@@ -9,7 +9,7 @@ let isInEditMode = ref(false)
 let currentTimestamp = ref(0)
 
 function updateTimestamp(value: number) {
-  currentTimestamp.value = value
+  currentTimestamp.value = value * 1000
 }
 </script>
 
@@ -66,7 +66,7 @@ function updateTimestamp(value: number) {
       </div>
     </div>
 
-    <SubtitleEditor />
+    <SubtitleEditor :currentTimestamp="currentTimestamp"/>
   </div>
 </template>
 
