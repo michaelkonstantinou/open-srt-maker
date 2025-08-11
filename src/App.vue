@@ -13,12 +13,15 @@ import TheNavbar from "@/layout/TheNavbar.vue";
 import {ref, type Ref} from "vue";
 import OpenSRTProject from "@/types/OpenSRTProject.ts";
 import SubtitleItem from "@/types/SubtitleItem.ts";
+import { Toaster } from '@/components/ui/sonner'
+import 'vue-sonner/style.css'
 
 const items = new Array(new SubtitleItem(5000, 10000, "Made using OpenSRTMaker", 1))
 const project: Ref<OpenSRTProject> = ref(new OpenSRTProject(1, "Untitled Project", items));
 </script>
 
 <template>
+  <Toaster richColors position="top-center" />
   <SidebarProvider>
     <TheSidebar />
     <SidebarInset>
