@@ -16,14 +16,17 @@ import SubtitleItem from "@/types/SubtitleItem.ts";
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 
+const projects: Ref<OpenSRTProject[]> = ref([]);
 const items = new Array(new SubtitleItem(5000, 10000, "Made using OpenSRTMaker", 1))
 const project: Ref<OpenSRTProject> = ref(new OpenSRTProject(1, "Untitled Project", items));
+projects.value.push(project)
+
 </script>
 
 <template>
   <Toaster richColors position="top-center" />
   <SidebarProvider>
-    <TheSidebar />
+    <TheSidebar :projects="projects" />
     <SidebarInset>
       <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
         <div class="flex items-center gap-2 px-4">

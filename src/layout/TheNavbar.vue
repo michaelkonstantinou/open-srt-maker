@@ -11,8 +11,11 @@ import OpenSRTProject from "@/types/OpenSRTProject.ts";
 import ExportFilenameDialog from "@/components/dialogs/ExportFilenameDialog.vue";
 import {ref, type Ref} from "vue";
 import {toast} from "vue-sonner";
+import {Trash, Copy, FileDown, FileUp, Link } from "lucide-vue-next";
 import {ExportActionType} from "@/types/ExportActionType.ts";
 import FilenameValidator from "@/validators/FilenameValidator.ts";
+import ImportSubtitlesDialog from "@/components/dialogs/ImportSubtitlesDialog.vue";
+import type SubtitleItem from "@/types/SubtitleItem.ts";
 
 const props = defineProps({
   project: {
@@ -22,6 +25,7 @@ const props = defineProps({
 });
 
 const openExportAsModal: Ref<Boolean> = ref(false);
+const openImportModal: Ref<Boolean> = ref(false);
 let exportAction: ExportActionType = ExportActionType.GENERIC;
 const validator: FilenameValidator = new FilenameValidator();
 
@@ -65,6 +69,11 @@ function exportFile(filename: string) {
   exportSubtitlesToFile(filename)
 }
 
+function setSubtitles(subtitles: SubtitleItem[]) {
+  props.project.subtitleItems = subtitles;
+  toast.success("Subtitles added from file successfully");
+}
+
 /**
  * Sets the exportAction of this component to be equal to the action invoked.
  * Sets the flag that is responsible to open the filename modal to true
@@ -83,28 +92,28 @@ function openModalForExport(action: ExportActionType) {
     <MenubarMenu>
       <MenubarTrigger>File</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>Import file</MenubarItem>
+        <MenubarItem @click="openImportModal = true"><FileUp />Import file</MenubarItem>
         <MenubarSeparator />
-        <MenubarItem @click="openModalForExport(ExportActionType.GENERIC)">Export as plain text</MenubarItem>
-        <MenubarSeparator />
-           <MenubarItem @click="openModalForExport(ExportActionType.SRT)">Export .SRT</MenubarItem>
-        <MenubarItem @click="openModalForExport(ExportActionType.VTT)">Export .VTT</MenubarItem>
+        <MenubarItem @click="openModalForExport(ExportActionType.GENERIC)"><FileDown />Export as plain text</MenubarItem>
+        <MenubarItem @click="openModalForExport(ExportActionType.SRT)"><FileDown />Export .SRT</MenubarItem>
+        <MenubarItem @click="openModalForExport(ExportActionType.VTT)"><FileDown />Export .VTT</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger>Video</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>Set video url</MenubarItem>
+        <MenubarItem><Link />Set video url</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger>Project</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>Create copy</MenubarItem>
-        <MenubarItem>Delete project</MenubarItem>
+        <MenubarItem><Copy />Create copy</MenubarItem>
+        <MenubarItem><Trash />Delete project</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   </Menubar>
 
   <ExportFilenameDialog :open="openExportAsModal" @close="openExportAsModal = false" @confirm="exportFile"/>
+  <ImportSubtitlesDialog :open="openImportModal" @close="openImportModal = false" @subtitlesUploaded="setSubtitles"/>
 </template>

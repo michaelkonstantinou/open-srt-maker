@@ -50,7 +50,7 @@ function onConfirm() {
         <Input id="link" v-model="filename"/>
       </div>
     </div>
-    <DialogFooter class="sm:justify-start">
+    <DialogFooter>
       <Button type="submit" size="sm" class="px-3" @click="onConfirm">Save</Button>
       <DialogClose as-child>
         <Button type="button" variant="secondary" @click="emit('close')">

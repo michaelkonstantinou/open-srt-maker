@@ -2,11 +2,19 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup, SidebarGroupAction, SidebarGroupContent, SidebarGroupLabel,
+  SidebarGroup, SidebarGroupAction, SidebarGroupLabel,
   SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import {Github, Info, Plus} from "lucide-vue-next";
 import logo from "@/assets/logo.png"
+import { type Ref } from 'vue';
+
+defineProps({
+  projects: {
+    type: Array<Ref>,
+    required: true
+  }
+});
 
 const sidebarLinks = [
   {name: "About us", icon: Info, url: ""},
@@ -44,7 +52,15 @@ const sidebarLinks = [
         <SidebarGroupAction>
           <Plus /> <span class="sr-only">Add Project</span>
         </SidebarGroupAction>
-        <SidebarGroupContent></SidebarGroupContent>
+        <SidebarMenu>
+          <SidebarMenuItem v-for="project in projects" :key="project.value.name">
+            <SidebarMenuButton asChild>
+              <a :href="project.value.name">
+                <span>{{project.value.name}}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarGroup>
     </SidebarContent>
 <!--    <SidebarFooter />-->
