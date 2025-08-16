@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {type Ref, ref} from "vue";
+import {toast} from "vue-sonner";
 
 const props = defineProps({
   open: {
@@ -19,19 +20,28 @@ const props = defineProps({
     required: false,
     default: false,
   },
-  defaultFilename: {
+  currentUrl: {
     type: String,
     required: false,
-    default: "mysubtitles.srt"
+    default: ""
   }
 });
 
-const filename: Ref<String> = ref(props.defaultFilename)
+const videoUrl: Ref<String> = ref(props.currentUrl)
 const emit = defineEmits(['close', 'confirm'])
 
+/**
+ * Verifies that the URL given is valid and sets the url of the video accordingly
+ */
 function onConfirm() {
-  emit('confirm', filename.value);
+  if (videoUrl.value.length <= 5 || !videoUrl.value.startsWith("http")) {
+    toast.warning("Please provide a valid url (starting with http...)")
+    return
+  }
+
+  emit('confirm', videoUrl.value);
   emit('close')
+  toast.success("A new video url has been set successfully!")
 }
 </script>
 
@@ -39,15 +49,15 @@ function onConfirm() {
   <Dialog :open="open" >
   <DialogContent class="sm:max-w-md">
     <DialogHeader>
-      <DialogTitle>Export</DialogTitle>
+      <DialogTitle>Video URL</DialogTitle>
       <DialogDescription>
-        Please provide the filename of the exported file.
+        Please write the link of the video you wish to append subtitles to.
       </DialogDescription>
     </DialogHeader>
     <div class="flex items-center space-x-2">
       <div class="grid flex-1 gap-2">
-        <Label for="link" class="sr-only">Filename</Label>
-        <Input id="link" v-model="filename"/>
+        <Label for="url" class="sr-only">Video URL</Label>
+        <Input id="url" type="url" v-model="videoUrl"/>
       </div>
     </div>
     <DialogFooter>

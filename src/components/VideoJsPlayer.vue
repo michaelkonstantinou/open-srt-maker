@@ -4,9 +4,8 @@
 
 <script setup lang="ts">
 import videojs from 'video.js';
-import {onBeforeUnmount, onMounted, useTemplateRef} from "vue";
+import {onBeforeUnmount, onMounted, useTemplateRef, watch} from "vue";
 import type Player from "video.js/dist/types/player";
-import {ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem} from "@/components/ui/context-menu";
 
 const props = defineProps({
   src: {
@@ -54,6 +53,19 @@ onBeforeUnmount(() => {
   if (player) {
     player.dispose();
   }
-})
+});
+
+/**
+ * Watch for a change in the provided src.
+ * If a new video url is given, then invoke the VideoJS' API to change the src value
+ */
+watch(
+    () => props.src,
+    (newValue) => {
+      if (player !== null) {
+        player.src({src: newValue})
+      }
+    }
+)
 
 </script>

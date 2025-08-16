@@ -77,13 +77,11 @@ function removeItem(id: Number) {
       <div>
         <ContextMenu>
           <ContextMenuTrigger class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
-            <VideoJsPlayer src="https://vjs.zencdn.net/v/oceans.mp4" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
+            <VideoJsPlayer :src="project.url" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem @click="console.log('sth')">Add text here</ContextMenuItem>
             <ContextMenuItem>Remove current text(s)</ContextMenuItem>
-            <ContextMenuItem>Team</ContextMenuItem>
-            <ContextMenuItem>Subscription</ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
 

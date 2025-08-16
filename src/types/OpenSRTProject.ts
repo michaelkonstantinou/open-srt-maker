@@ -5,11 +5,13 @@ export default class OpenSRTProject {
     id: number;
     name: string;
     subtitleItems: Array<SubtitleItem>;
+    url: string;
 
-    constructor(id: number, name: string, subtitleItems: Array<SubtitleItem> = []) {
+    constructor(id: number, name: string, subtitleItems: Array<SubtitleItem> = [], videoUrl: string) {
         this.id = id;
         this.name = name;
         this.subtitleItems = subtitleItems;
+        this.url = videoUrl;
     }
 
     /**

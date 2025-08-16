@@ -16,6 +16,7 @@ import {ExportActionType} from "@/types/ExportActionType.ts";
 import FilenameValidator from "@/validators/FilenameValidator.ts";
 import ImportSubtitlesDialog from "@/components/dialogs/ImportSubtitlesDialog.vue";
 import type SubtitleItem from "@/types/SubtitleItem.ts";
+import SetVideoUrlDialog from "@/components/dialogs/SetVideoUrlDialog.vue";
 
 const props = defineProps({
   project: {
@@ -26,6 +27,7 @@ const props = defineProps({
 
 const openExportAsModal: Ref<Boolean> = ref(false);
 const openImportModal: Ref<Boolean> = ref(false);
+const openSetVideoUrlModal: Ref<Boolean> = ref(false);
 let exportAction: ExportActionType = ExportActionType.GENERIC;
 const validator: FilenameValidator = new FilenameValidator();
 
@@ -69,6 +71,11 @@ function exportFile(filename: string) {
   exportSubtitlesToFile(filename)
 }
 
+/**
+ * Triggered when the user has used the Imports Subtitle Dialog which will return an array
+ * of SubtitleItem instances to replace the current project's subtitles
+ * @param subtitles
+ */
 function setSubtitles(subtitles: SubtitleItem[]) {
   props.project.subtitleItems = subtitles;
   toast.success("Subtitles added from file successfully");
@@ -83,6 +90,10 @@ function setSubtitles(subtitles: SubtitleItem[]) {
 function openModalForExport(action: ExportActionType) {
   exportAction = action;
   openExportAsModal.value = true;
+}
+
+function setVideoUrl(url: string) {
+  props.project.url = url;
 }
 
 </script>
@@ -102,7 +113,7 @@ function openModalForExport(action: ExportActionType) {
     <MenubarMenu>
       <MenubarTrigger>Video</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem><Link />Set video url</MenubarItem>
+        <MenubarItem @click="openSetVideoUrlModal = true"><Link />Set video url</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
@@ -115,5 +126,6 @@ function openModalForExport(action: ExportActionType) {
   </Menubar>
 
   <ExportFilenameDialog :open="openExportAsModal" @close="openExportAsModal = false" @confirm="exportFile"/>
+  <SetVideoUrlDialog :open="openSetVideoUrlModal" @close="openSetVideoUrlModal = false" @confirm="setVideoUrl"/>
   <ImportSubtitlesDialog :open="openImportModal" @close="openImportModal = false" @subtitlesUploaded="setSubtitles"/>
 </template>
