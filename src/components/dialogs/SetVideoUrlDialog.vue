@@ -57,7 +57,7 @@ function onConfirm() {
     <div class="flex items-center space-x-2">
       <div class="grid flex-1 gap-2">
         <Label for="url" class="sr-only">Video URL</Label>
-        <Input id="url" type="url" v-model="videoUrl"/>
+        <Input id="url" type="url" v-model="videoUrl" placeholder="https://my-awesome-website.com/video.mp4"/>
       </div>
     </div>
     <DialogFooter>

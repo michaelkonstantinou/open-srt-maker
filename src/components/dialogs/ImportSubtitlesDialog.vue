@@ -74,8 +74,11 @@ function uploadSubtitles() {
         </div>
       </div>
       <DialogFooter>
-        <Button type="submit" @click="uploadSubtitles">
+        <Button type="submit" size="sm" class="px-3" @click="uploadSubtitles">
           Save changes
+        </Button>
+        <Button type="button" variant="secondary" @click="emit('close')">
+          Close
         </Button>
       </DialogFooter>
     </DialogContent>

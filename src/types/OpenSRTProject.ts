@@ -29,4 +29,23 @@ export default class OpenSRTProject {
             })
             .join("")
     }
+
+    public toVttContent(): string {
+        return (
+            "WEBVTT\n\n" +
+            this.subtitleItems
+                .map((item) => {
+                    return `${formatTime(item.startingTimestamp, ".")} --> ${formatTime(item.endingTimestamp, ".")}\n${item.content}\n`
+                })
+                .join("\n")
+        )
+    }
+
+    /**
+     * Creates a Blob url in VTT format that can be used by the video player to show the subtitles
+     */
+    createVttUrl(): string {
+        const blob = new Blob([this.toVttContent()], { type: "text/vtt" })
+        return URL.createObjectURL(blob)
+    }
 }

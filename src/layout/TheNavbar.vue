@@ -42,7 +42,7 @@ function exportSubtitlesToFile(filename: string) {
   if (exportAction === ExportActionType.SRT || exportAction === ExportActionType.GENERIC) {
     content = props.project.toSrtContent()
   } else {
-    content = props.project.toSrtContent()
+    content = props.project.toVttContent()
   }
 
   const blob = new Blob([content], { type: "text/plain;charset=utf-8" })

@@ -17,7 +17,7 @@ import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 
 const projects: Ref<OpenSRTProject[]> = ref([]);
-const items = new Array(new SubtitleItem(5000, 10000, "Made using OpenSRTMaker", 1))
+const items = new Array(new SubtitleItem(1000, 10000, "Made using OpenSRTMaker", 1))
 const project: Ref<OpenSRTProject> = ref(new OpenSRTProject(1, "Untitled Project", items, "https://vjs.zencdn.net/v/oceans.mp4"));
 projects.value.push(project)
 

@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import SubtitleItem from "@/types/SubtitleItem.ts";
 import SubtitleEditorRecord from "@/components/editors/SubtitleEditorRecord.vue";
 import {type Ref, ref} from "vue";
-import {Pencil, Save} from "lucide-vue-next";
+import {Pencil, Save, RefreshCcw} from "lucide-vue-next";
 
 const props = defineProps({
   currentTimestamp: {
@@ -19,17 +19,21 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['remove']);
+const emit = defineEmits(['remove', 'onGenerateSubtitles']);
 const isGlobalEditEnabled: Ref<Boolean> = ref(false);
 
 function addNewItem() {
   props.items.push(
       new SubtitleItem(props.currentTimestamp, props.currentTimestamp + 2000, "", props.items.length + 1)
-  )
+  );
 }
 
 function removeItem(id: Number) {
   emit('remove', id);
+}
+
+function generateSubtitles() {
+  emit('onGenerateSubtitles')
 }
 
 </script>
@@ -54,6 +58,10 @@ function removeItem(id: Number) {
             class="px-4 py-2 rounded-lg shadow bg-blue-500 hover:bg-blue-600">
       <Save v-show="isGlobalEditEnabled"/>
       Save all
+    </Button>
+    <Button @click="generateSubtitles" size="lg" class="info px-4 py-2 rounded-lg shadow">
+      <RefreshCcw />
+      Reload video subtitles
     </Button>
   </div>
 

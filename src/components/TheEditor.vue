@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Save } from "lucide-vue-next"
-import {ref} from "vue";
+import {type Ref, ref, watch} from "vue";
 import SubtitleEditor from "@/components/editors/SubtitleEditor.vue";
 import VideoJsPlayer from "@/components/VideoJsPlayer.vue";
 import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@/components/ui/context-menu";
@@ -13,8 +13,9 @@ const props = defineProps({
   }
 });
 
-let isInEditMode = ref(false)
-let currentTimestamp = ref(0)
+let isInEditMode = ref(false);
+let currentTimestamp = ref(0);
+let subtitlesAsVttUrl: Ref<String | null> = ref<String | null>(null);
 
 function updateTimestamp(value: number) {
   currentTimestamp.value = value * 1000
@@ -23,6 +24,12 @@ function updateTimestamp(value: number) {
 function removeItem(id: Number) {
   props.project.removeItemById(id);
 }
+
+function updateSubtitlesInPlayer() {
+  subtitlesAsVttUrl.value = props.project.createVttUrl();
+}
+
+// watch()
 </script>
 
 <template>
@@ -77,7 +84,7 @@ function removeItem(id: Number) {
       <div>
         <ContextMenu>
           <ContextMenuTrigger class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
-            <VideoJsPlayer :src="project.url" @timeUpdate="updateTimestamp" class="w-max rounded-lg"/>
+            <VideoJsPlayer :src="project.url" @timeUpdate="updateTimestamp" class="w-max rounded-lg" :subtitlesUrl="subtitlesAsVttUrl"/>
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem @click="console.log('sth')">Add text here</ContextMenuItem>
@@ -88,6 +95,6 @@ function removeItem(id: Number) {
       </div>
     </div>
 
-    <SubtitleEditor :currentTimestamp="currentTimestamp" :items="project.subtitleItems" @remove="removeItem"/>
+    <SubtitleEditor :currentTimestamp="currentTimestamp" :items="project.subtitleItems" @remove="removeItem" @onGenerateSubtitles="updateSubtitlesInPlayer"/>
   </div>
 </template>
