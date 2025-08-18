@@ -17,10 +17,10 @@ const props = defineProps({
     type: String,
     required: true
   },
-  subtitlesUrl: {
-    type: String,
+  cues: {
+    type: Array<VTTCue>,
     required: false,
-    default: null
+    default: []
   }
 });
 
@@ -55,19 +55,19 @@ let player: Player | null = null;
  * of the instantiated VideoJs Player
  */
 onMounted(() => {
-  player = videojs(elVideoPlayer.value, videoOptions);
+  player = videojs(elVideoPlayer.value, videoOptions, () => {
+    // Listen for timeupdate
+    player.on('timeupdate', () => {
+      emit('timeUpdate', player?.currentTime())
+    });
 
-  // Listen for timeupdate
-  player.on('timeupdate', () => {
-    emit('timeUpdate', player?.currentTime())
-  })
+    playerService = new VideoJsPlayerService(player)
 
-  playerService = new VideoJsPlayerService(player)
-
-  // Add subtitles' track (if any exist)
-  if (props.subtitlesUrl !== null) {
-    playerService.updateSubtitles(props.subtitlesUrl);
-  }
+    // Add subtitles' track (if any exist)
+    if (props.cues.length > 0) {
+      playerService.updateSubtitles(props.cues);
+    }
+  });
 });
 
 onBeforeUnmount(() => {
@@ -78,6 +78,6 @@ onBeforeUnmount(() => {
 watch(() => props.src, newValue => playerService?.setSourceUrl(newValue))
 
 // Update the player's track to include the up-do-date subtitles if the props are changed
-watch(() => props.subtitlesUrl, (newValue) => playerService?.updateSubtitles(newValue));
+watch(() => props.cues, (newValue) => playerService?.updateSubtitles(newValue));
 
 </script>

@@ -48,4 +48,22 @@ export default class OpenSRTProject {
         const blob = new Blob([this.toVttContent()], { type: "text/vtt" })
         return URL.createObjectURL(blob)
     }
+
+    /**
+     * Creates an array of VTTCue items that can be used as input to an html-track object
+     * to show the subtitles. It is wiser to use VTTCue instances for optimization purposes
+     */
+    toVttCues(): VTTCue[] {
+        const cues: VTTCue[] = []
+        this.subtitleItems.forEach((item) => {
+            const cue: VTTCue = new VTTCue(
+                item.startingTimestamp / 1000,
+                item.endingTimestamp / 1000,
+                item.content
+            )
+            cues.push(cue)
+        })
+
+        return cues;
+    }
 }

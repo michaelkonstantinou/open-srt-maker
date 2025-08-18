@@ -15,7 +15,7 @@ const props = defineProps({
 
 let isInEditMode = ref(false);
 let currentTimestamp = ref(0);
-let subtitlesAsVttUrl: Ref<String | null> = ref<String | null>(null);
+let subtitlesAsVttCues: Ref<VTTCue[]> = ref<VTTCue[]>(props.project.toVttCues());
 
 function updateTimestamp(value: number) {
   currentTimestamp.value = value * 1000
@@ -26,7 +26,7 @@ function removeItem(id: Number) {
 }
 
 function updateSubtitlesInPlayer() {
-  subtitlesAsVttUrl.value = props.project.createVttUrl();
+  subtitlesAsVttCues.value = props.project.toVttCues();
 }
 
 // watch()
@@ -84,7 +84,7 @@ function updateSubtitlesInPlayer() {
       <div>
         <ContextMenu>
           <ContextMenuTrigger class="bg-gray-300 aspect-video flex items-center justify-center rounded-lg shadow px-5">
-            <VideoJsPlayer :src="project.url" @timeUpdate="updateTimestamp" class="w-max rounded-lg" :subtitlesUrl="subtitlesAsVttUrl"/>
+            <VideoJsPlayer :src="project.url" @timeUpdate="updateTimestamp" class="w-max rounded-lg" :cues="subtitlesAsVttCues"/>
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem @click="console.log('sth')">Add text here</ContextMenuItem>
