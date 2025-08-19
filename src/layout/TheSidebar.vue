@@ -7,14 +7,8 @@ import {
 } from '@/components/ui/sidebar'
 import {Github, Info, Plus} from "lucide-vue-next";
 import logo from "@/assets/logo.png"
-import { type Ref } from 'vue';
-
-defineProps({
-  projects: {
-    type: Array<Ref>,
-    required: true
-  }
-});
+import {useProjectsStore} from "@/store/projectsStore.ts";
+const projectsStore = useProjectsStore()
 </script>
 
 <template>
@@ -54,10 +48,10 @@ defineProps({
           <Plus /> <span class="sr-only">Add Project</span>
         </SidebarGroupAction>
         <SidebarMenu>
-          <SidebarMenuItem v-for="project in projects" :key="project.value.name">
+          <SidebarMenuItem v-for="project in projectsStore.projects" :key="project.name">
             <SidebarMenuButton asChild>
-              <RouterLink :to="{name: 'projects.edit', params: {slug: project.value.slug}}">
-                <span>{{project.value.name}}</span>
+              <RouterLink :to="{name: 'projects.edit', params: {slug: project.slug}}">
+                <span>{{project.name}}</span>
               </RouterLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
