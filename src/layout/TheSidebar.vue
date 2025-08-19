@@ -15,11 +15,6 @@ defineProps({
     required: true
   }
 });
-
-const sidebarLinks = [
-  {name: "About us", icon: Info, url: ""},
-  {name: "Github", icon: Github, url: ""}
-]
 </script>
 
 <template>
@@ -36,11 +31,17 @@ const sidebarLinks = [
       <SidebarGroup>
         <SidebarGroupLabel>Application Info</SidebarGroupLabel>
         <SidebarMenu>
-          <SidebarMenuItem v-for="sidebarLink in sidebarLinks" :key="sidebarLink.name">
+          <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a :href="sidebarLink.url">
-                <component :is="sidebarLink.icon" />
-                <span>{{sidebarLink.name}}</span>
+              <RouterLink :to="{name: 'static.about'}">
+                <Info />
+                <span>About</span>
+              </RouterLink>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <a href="https://github.com/michaelkonstantinou/open-srt-maker" target="_blank">
+                <Github />
+                <span>Github</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -55,9 +56,9 @@ const sidebarLinks = [
         <SidebarMenu>
           <SidebarMenuItem v-for="project in projects" :key="project.value.name">
             <SidebarMenuButton asChild>
-              <a :href="project.value.name">
+              <RouterLink :to="{name: 'projects.edit', params: {slug: project.value.slug}}">
                 <span>{{project.value.name}}</span>
-              </a>
+              </RouterLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
