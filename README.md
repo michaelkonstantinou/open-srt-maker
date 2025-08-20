@@ -85,4 +85,4 @@ If you are interested in a full working application with back-end support, **con
 
 ## 📜 License
 
-MIT License © Michael Konstantinou
+GPL-3.0 license
