@@ -32,8 +32,11 @@ export const useProjectsStore = defineStore('projects', () => {
         return projects.value.find(item => item.id === id) ?? null
     }
 
-    const deleteById = (id: number) => {
-        projects.value = projects.value.filter(item => item.id === id)
+    const deleteById = (id: number): boolean => {
+        const projectsBefore = projects.value.length
+        projects.value = projects.value.filter(item => item.id !== id)
+
+        return projectsBefore > projects.value.length
     }
 
     const createCopy = (id: number): boolean => {

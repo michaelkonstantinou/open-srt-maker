@@ -19,6 +19,7 @@ import type SubtitleItem from "@/types/SubtitleItem.ts";
 import SetVideoUrlDialog from "@/components/dialogs/SetVideoUrlDialog.vue";
 import AlertDialog from "@/components/dialogs/AlertDialog.vue";
 import {useProjectsStore} from "@/store/projectsStore.ts";
+import router from "@/router";
 
 const projectsStore = useProjectsStore()
 const props = defineProps({
@@ -101,12 +102,25 @@ function setVideoUrl(url: string) {
   props.project.url = url;
 }
 
+/**
+ * Simply invokes store's copy method and informs the user with a toast notification if the action was successful
+ */
 function copyProject() {
   const isActionSuccessful = projectsStore.createCopy(props.project.id)
   if (isActionSuccessful) {
     toast.success("A copy of this project has been created successfully!")
   } else {
     toast.error("An error occurred and could not create a copy of this project")
+  }
+}
+
+function deleteProject() {
+  const isActionSuccessful = projectsStore.deleteById(props.project.id)
+  if (!isActionSuccessful) {
+    toast.error("An error occurred and project could not be deleted")
+  } else {
+    toast.success("This project has been deleted successfully")
+    router.push({name: "static.about"})
   }
 }
 
@@ -134,7 +148,7 @@ function copyProject() {
       <MenubarTrigger>Project</MenubarTrigger>
       <MenubarContent>
         <MenubarItem @click="openCopyDialog = true"><Copy />Create copy</MenubarItem>
-        <MenubarItem><Trash />Delete project</MenubarItem>
+        <MenubarItem @click="openDeleteDialog = true"><Trash />Delete project</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   </Menubar>
@@ -145,5 +159,11 @@ function copyProject() {
   <AlertDialog :open="openCopyDialog" @close="openCopyDialog = false" @confirm="copyProject">
     <template #title>Copy project</template>
     Would you like to create a copy of this project and its settings?
+  </AlertDialog>
+  <AlertDialog :open="openDeleteDialog" @close="openDeleteDialog = false" @confirm="deleteProject">
+    <template #title>Delete project</template>
+    Are you absolutely sure that you want to delete this project?
+
+    Keep in mind that this action is not reversible!
   </AlertDialog>
 </template>

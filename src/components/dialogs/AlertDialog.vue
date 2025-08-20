@@ -41,7 +41,7 @@ function onConfirm() {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel @click="emit('close')">Cancel</AlertDialogCancel>
-        <AlertDialogAction @click="onConfirm">Continue</AlertDialogAction>
+        <AlertDialogAction class="bg-red-600 text-white hover:bg-red-700" @click="onConfirm">Continue</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
