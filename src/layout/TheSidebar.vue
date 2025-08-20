@@ -8,7 +8,15 @@ import {
 import {Github, Info, Plus} from "lucide-vue-next";
 import logo from "@/assets/logo.png"
 import {useProjectsStore} from "@/store/projectsStore.ts";
+import {ref, type Ref} from "vue";
+import CreateNewProjectDialog from "@/components/dialogs/CreateNewProjectDialog.vue";
 const projectsStore = useProjectsStore()
+
+const openCreateProjectDialog: Ref<Boolean> = ref(false);
+
+function createNewProject(projectName: string, videoUrl: string) {
+  projectsStore.create(projectName, videoUrl);
+}
 </script>
 
 <template>
@@ -44,7 +52,7 @@ const projectsStore = useProjectsStore()
 
       <SidebarGroup>
         <SidebarGroupLabel>Projects</SidebarGroupLabel>
-        <SidebarGroupAction>
+        <SidebarGroupAction @click="openCreateProjectDialog = true">
           <Plus /> <span class="sr-only">Add Project</span>
         </SidebarGroupAction>
         <SidebarMenu>
@@ -60,4 +68,6 @@ const projectsStore = useProjectsStore()
     </SidebarContent>
 <!--    <SidebarFooter />-->
   </Sidebar>
+
+  <CreateNewProjectDialog :open="openCreateProjectDialog" @close="openCreateProjectDialog = false" @confirm="createNewProject"/>
 </template>

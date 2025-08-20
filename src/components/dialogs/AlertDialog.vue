@@ -15,6 +15,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
+  },
+  classConfirm: {
+    type: String,
+    requited: false,
+    default: "",
   }
 });
 
@@ -41,7 +46,7 @@ function onConfirm() {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel @click="emit('close')">Cancel</AlertDialogCancel>
-        <AlertDialogAction class="bg-red-600 text-white hover:bg-red-700" @click="onConfirm">Continue</AlertDialogAction>
+        <AlertDialogAction :class="classConfirm" @click="onConfirm">Continue</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

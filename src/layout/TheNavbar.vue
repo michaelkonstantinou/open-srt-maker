@@ -160,7 +160,7 @@ function deleteProject() {
     <template #title>Copy project</template>
     Would you like to create a copy of this project and its settings?
   </AlertDialog>
-  <AlertDialog :open="openDeleteDialog" @close="openDeleteDialog = false" @confirm="deleteProject">
+  <AlertDialog :open="openDeleteDialog" @close="openDeleteDialog = false" classConfirm="bg-red-600 text-white hover:bg-red-700" @confirm="deleteProject">
     <template #title>Delete project</template>
     Are you absolutely sure that you want to delete this project?
 

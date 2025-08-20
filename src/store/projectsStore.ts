@@ -13,9 +13,7 @@ export const useProjectsStore = defineStore('projects', () => {
      * the data will be fetched by an API
      */
     const init = async () => {
-        const items = new Array(new SubtitleItem(1000, 10000, "Made using OpenSRTMaker", 1))
-        const project: OpenSRTProject = new OpenSRTProject(1, "Untitled Project", items, "https://vjs.zencdn.net/v/oceans.mp4");
-        projects.value.push(project)
+        create("Untitled Project", "https://vjs.zencdn.net/v/oceans.mp4")
     }
 
     /**
@@ -49,5 +47,13 @@ export const useProjectsStore = defineStore('projects', () => {
         return true
     }
 
-    return { projects, init, getBySlug, deleteById, createCopy }
+    const create = (name: string, videoUrl: string): void => {
+        const newId = projects.value.length + 1
+        const items = new Array(new SubtitleItem(1000, 10000, "Made using OpenSRTMaker", 1))
+        const project: OpenSRTProject = new OpenSRTProject(newId, name, items, videoUrl);
+
+        projects.value.push(project)
+    }
+
+    return { projects, init, getBySlug, deleteById, createCopy, create }
 })
