@@ -1,6 +1,13 @@
 import {formatTime} from "@/utils/timeUtils.ts";
 
-export default class SubtitleItem {
+interface SubtitleItemInterface {
+    id: number;
+    startingTimestamp: number;
+    endingTimestamp: number;
+    content: string;
+}
+
+export default class SubtitleItem implements SubtitleItemInterface{
     id: number;
     startingTimestamp: number;
     endingTimestamp: number;
@@ -11,6 +18,15 @@ export default class SubtitleItem {
         this.endingTimestamp = endingTimestamp;
         this.content = content;
         this.id = id;
+    }
+
+    static fromJSON(obj: SubtitleItemInterface): SubtitleItem {
+        return new SubtitleItem(
+            obj.startingTimestamp,
+            obj.endingTimestamp,
+            obj.content,
+            obj.id
+        )
     }
 
     /**

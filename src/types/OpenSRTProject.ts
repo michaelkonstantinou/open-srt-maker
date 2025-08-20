@@ -1,20 +1,38 @@
-import type SubtitleItem from "@/types/SubtitleItem.ts";
+import SubtitleItem from "@/types/SubtitleItem.ts";
 import {formatTime} from "@/utils/timeUtils.ts";
 import {slugify} from "@/utils/textUtils.ts";
 
-export default class OpenSRTProject {
+interface OpenSRTProjectInterface {
+    id: number;
+    name: string;
+    subtitleItems: Array<SubtitleItem>;
+    url: string;
+    slug: string;
+}
+
+export default class OpenSRTProject implements OpenSRTProjectInterface {
     id: number;
     name: string;
     subtitleItems: Array<SubtitleItem>;
     url: string;
     slug: string;
 
-    constructor(id: number, name: string, subtitleItems: Array<SubtitleItem> = [], videoUrl: string) {
+    constructor(id: number, name: string, subtitleItems: Array<SubtitleItem> = [], videoUrl: string, slug?: string) {
         this.id = id;
         this.name = name;
         this.subtitleItems = subtitleItems;
         this.url = videoUrl;
-        this.slug = slugify(this.name);
+        this.slug = slug ?? slugify(this.name);
+    }
+
+    static fromJSON(obj: OpenSRTProjectInterface): OpenSRTProject {
+        return new OpenSRTProject(
+            obj.id,
+            obj.name,
+            obj.subtitleItems?.map((s: any) => SubtitleItem.fromJSON(s)) ?? [],
+            obj.url,
+            obj.slug
+        )
     }
 
     /**

@@ -1,8 +1,10 @@
 import {defineStore} from "pinia";
-import type {Ref} from "vue";
+import {type Ref, watch} from "vue";
 import OpenSRTProject from "@/types/OpenSRTProject.ts";
 import {ref} from "vue";
 import SubtitleItem from "@/types/SubtitleItem.ts";
+
+const STORAGE_PROJECTS_KEY: string = "open_subtitles_maker_projects"
 
 export const useProjectsStore = defineStore('projects', () => {
     const projects: Ref<OpenSRTProject[]> = ref([]);
@@ -10,10 +12,19 @@ export const useProjectsStore = defineStore('projects', () => {
     /**
      * The function adds an empty project to the application.
      * It is important to keep this function and to keep it asynchronous, as this would be required in case
-     * the data will be fetched by an API
+     * the data will be fetched by an API.
+     *
+     * Since there is no backend, the function loads items from local storage (if exist)
      */
-    const init = async () => {
-        create("Untitled Project", "https://vjs.zencdn.net/v/oceans.mp4")
+    const init = () => {
+        // Load from localStorage if exists
+        const stored: string | null = localStorage.getItem(STORAGE_PROJECTS_KEY)
+        if (stored !== null) {
+            const parsed = JSON.parse(stored)
+            projects.value = parsed.map((p: any) => OpenSRTProject.fromJSON(p))
+        } else {
+            create("Untitled Project", "https://vjs.zencdn.net/v/oceans.mp4")
+        }
     }
 
     /**
@@ -38,12 +49,13 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     const createCopy = (id: number): boolean => {
+        const newId = projects.value.length + 1
         const projectToCopy = getById(id)
         if (projectToCopy === null) {
             return false
         }
 
-        projects.value.push(projectToCopy.copy(id))
+        projects.value.push(projectToCopy.copy(newId))
         return true
     }
 
@@ -63,6 +75,15 @@ export const useProjectsStore = defineStore('projects', () => {
 
         return project
     }
+
+    // Persist changes to localStorage. REMOVE IF CONNECTED WITH BACKEND
+    watch(
+        projects,
+        (newProjects) => {
+            localStorage.setItem(STORAGE_PROJECTS_KEY, JSON.stringify(newProjects))
+        },
+        { deep: true }
+    )
 
     return { projects, init, getBySlug, deleteById, createCopy, create }
 })
