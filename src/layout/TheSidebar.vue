@@ -10,12 +10,16 @@ import logo from "@/assets/logo.png"
 import {useProjectsStore} from "@/store/projectsStore.ts";
 import {ref, type Ref} from "vue";
 import CreateNewProjectDialog from "@/components/dialogs/CreateNewProjectDialog.vue";
+import type OpenSRTProject from "@/types/OpenSRTProject.ts";
+import {useRouter} from "vue-router";
 const projectsStore = useProjectsStore()
 
 const openCreateProjectDialog: Ref<Boolean> = ref(false);
+const router = useRouter()
 
-function createNewProject(projectName: string, videoUrl: string) {
-  projectsStore.create(projectName, videoUrl);
+function createNewProject(project: OpenSRTProject) {
+  router.push({name: "projects.edit", params: {slug: project.slug}})
+  openCreateProjectDialog.value = false
 }
 </script>
 
@@ -69,5 +73,5 @@ function createNewProject(projectName: string, videoUrl: string) {
 <!--    <SidebarFooter />-->
   </Sidebar>
 
-  <CreateNewProjectDialog :open="openCreateProjectDialog" @close="openCreateProjectDialog = false" @confirm="createNewProject"/>
+  <CreateNewProjectDialog :open="openCreateProjectDialog" @close="openCreateProjectDialog = false" @created="createNewProject"/>
 </template>

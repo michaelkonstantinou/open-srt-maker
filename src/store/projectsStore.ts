@@ -47,12 +47,21 @@ export const useProjectsStore = defineStore('projects', () => {
         return true
     }
 
-    const create = (name: string, videoUrl: string): void => {
+    /**
+     * Creates a new (empty) project with the given arguments.
+     * Returns the created project as an OpenSRTProject instance
+     *
+     * @param name
+     * @param videoUrl
+     */
+    const create = (name: string, videoUrl: string): OpenSRTProject => {
         const newId = projects.value.length + 1
         const items = new Array(new SubtitleItem(1000, 10000, "Made using OpenSRTMaker", 1))
         const project: OpenSRTProject = new OpenSRTProject(newId, name, items, videoUrl);
 
         projects.value.push(project)
+
+        return project
     }
 
     return { projects, init, getBySlug, deleteById, createCopy, create }

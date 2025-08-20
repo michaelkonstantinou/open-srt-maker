@@ -9,9 +9,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {type Ref, ref} from "vue";
+import {toTypedSchema} from "@vee-validate/zod";
+import {z} from "zod";
+import {useForm} from "vee-validate";
+import {toast} from "vue-sonner";
+import {useProjectsStore} from "@/store/projectsStore.ts";
+import type OpenSRTProject from "@/types/OpenSRTProject.ts";
+
+interface ProjectFormData {
+  projectName: string,
+  videoUrl: string
+}
 
 const props = defineProps({
   open: {
@@ -21,14 +38,24 @@ const props = defineProps({
   }
 });
 
-const projectName: Ref<String> = ref("")
-const projectVideoUrl: Ref<String> = ref("")
-const emit = defineEmits(['close', 'confirm'])
+const projectsStore = useProjectsStore()
+const emit = defineEmits(['close', 'created'])
 
-function onConfirm() {
-  emit('confirm', projectName.value, projectVideoUrl.value);
-  emit('close')
-}
+const formSchema = toTypedSchema(z.object({
+  projectName: z.string().min(3),
+  videoUrl: z.string().url().min(5)
+}))
+
+const { handleSubmit } = useForm({
+  validationSchema: formSchema,
+})
+
+const onSubmit = handleSubmit((values: ProjectFormData) => {
+  // Create a new project and inform the user about it
+  const createdProject: OpenSRTProject = projectsStore.create(values.projectName, values.videoUrl)
+  toast.success("Project has been created successfully!")
+  emit('created', createdProject)
+})
 </script>
 
 <template>
@@ -40,19 +67,29 @@ function onConfirm() {
         Please provide the name of the new project.
       </DialogDescription>
     </DialogHeader>
-    <div class="flex flex-col space-y-2">
-      <div class="grid gap-2">
-        <Label for="projectName">Project name</Label>
-        <Input id="projectName" v-model="projectName"/>
-      </div>
-      <div class="grid gap-2">
-        <Label for="projectVideoUrl">Video url</Label>
-        <Input id="projectVideoUrl" v-model="projectVideoUrl"/>
-      </div>
-    </div>
+    <form @submit.prevent="onSubmit" class="flex flex-col space-y-2">
+      <FormField class="grid gap-2" name="projectName" v-slot="{ componentField }">
+        <FormItem v-auto-animate>
+          <FormLabel>Project name</FormLabel>
+          <FormControl>
+            <Input id="projectName" placeholder="My awesome project" v-bind="componentField"/>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField class="grid gap-2" name="videoUrl" v-slot="{ componentField }">
+        <FormItem v-auto-animate>
+          <FormLabel>Video URL</FormLabel>
+          <FormControl>
+            <Input id="projectName" placeholder="https://example.com/my-video.mp4" v-bind="componentField"/>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </form>
 
     <DialogFooter>
-      <Button type="submit" size="sm" class="px-3" @click="onConfirm">Create</Button>
+      <Button type="submit" size="sm" class="px-3" @click="onSubmit">Create</Button>
       <DialogClose as-child>
         <Button type="button" variant="secondary" @click="emit('close')">
           Close
