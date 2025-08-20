@@ -10,6 +10,10 @@ import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 import TheSidebar from "@/layout/TheSidebar.vue";
 import {SidebarProvider} from "@/components/ui/sidebar";
+import {useProjectsStore} from "@/store/projectsStore.ts";
+
+const projectsStore = useProjectsStore()
+projectsStore.init()
 </script>
 
 <template>
