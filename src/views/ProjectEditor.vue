@@ -4,11 +4,15 @@ import TheEditor from "@/components/TheEditor.vue";
 import TheBaseLayout from "@/layout/TheBaseLayout.vue";
 import {useProjectsStore} from "@/store/projectsStore.ts";
 import {useRoute} from "vue-router";
+import {computed} from "vue";
 
 const projectsStore = useProjectsStore()
 const route = useRoute()
 
-const project = projectsStore.getBySlug(route.params.slug)
+const project = computed(() =>
+    projectsStore.getBySlug(route.params.slug as string)
+)
+
 </script>
 
 <template>

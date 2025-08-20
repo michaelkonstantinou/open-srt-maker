@@ -45,14 +45,6 @@ export default class OpenSRTProject {
     }
 
     /**
-     * Creates a Blob url in VTT format that can be used by the video player to show the subtitles
-     */
-    createVttUrl(): string {
-        const blob = new Blob([this.toVttContent()], { type: "text/vtt" })
-        return URL.createObjectURL(blob)
-    }
-
-    /**
      * Creates an array of VTTCue items that can be used as input to an html-track object
      * to show the subtitles. It is wiser to use VTTCue instances for optimization purposes
      */
@@ -68,5 +60,14 @@ export default class OpenSRTProject {
         })
 
         return cues;
+    }
+
+    copy(id: number): OpenSRTProject {
+        const copiedSubtitleItems: SubtitleItem[] = []
+        for (let item of this.subtitleItems) {
+            copiedSubtitleItems.push(item.copy())
+        }
+
+        return new OpenSRTProject(id, this.name + " (Copy)", copiedSubtitleItems, this.url)
     }
 }

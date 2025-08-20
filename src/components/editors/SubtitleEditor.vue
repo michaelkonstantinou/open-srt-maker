@@ -69,7 +69,7 @@ function generateSubtitles() {
   <!-- Subtitles List -->
   <Card class="w-full max-w-3xl bg-white rounded-lg shadow p-4">
 
-    <h2 class="text-lg font-semibold mb-4 text-gray-700">!Subtitles</h2>
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">Subtitles</h2>
     <ul class="divide-y divide-gray-200">
       <SubtitleEditorRecord v-for="item in items" :item="item" :key="item.id" :globalEdit="isGlobalEditEnabled" @removed="removeItem"/>
     </ul>

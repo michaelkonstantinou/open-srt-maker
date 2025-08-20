@@ -28,4 +28,8 @@ export default class SubtitleItem {
 
         return this.content
     }
+
+    copy(): SubtitleItem {
+        return new SubtitleItem(this.startingTimestamp, this.endingTimestamp, this.content, this.id)
+    }
 }

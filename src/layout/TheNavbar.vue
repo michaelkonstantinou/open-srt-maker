@@ -17,7 +17,10 @@ import FilenameValidator from "@/validators/FilenameValidator.ts";
 import ImportSubtitlesDialog from "@/components/dialogs/ImportSubtitlesDialog.vue";
 import type SubtitleItem from "@/types/SubtitleItem.ts";
 import SetVideoUrlDialog from "@/components/dialogs/SetVideoUrlDialog.vue";
+import AlertDialog from "@/components/dialogs/AlertDialog.vue";
+import {useProjectsStore} from "@/store/projectsStore.ts";
 
+const projectsStore = useProjectsStore()
 const props = defineProps({
   project: {
     type: OpenSRTProject,
@@ -28,6 +31,8 @@ const props = defineProps({
 const openExportAsModal: Ref<Boolean> = ref(false);
 const openImportModal: Ref<Boolean> = ref(false);
 const openSetVideoUrlModal: Ref<Boolean> = ref(false);
+const openCopyDialog: Ref<Boolean> = ref(false);
+const openDeleteDialog: Ref<Boolean> = ref(false);
 let exportAction: ExportActionType = ExportActionType.GENERIC;
 const validator: FilenameValidator = new FilenameValidator();
 
@@ -96,6 +101,15 @@ function setVideoUrl(url: string) {
   props.project.url = url;
 }
 
+function copyProject() {
+  const isActionSuccessful = projectsStore.createCopy(props.project.id)
+  if (isActionSuccessful) {
+    toast.success("A copy of this project has been created successfully!")
+  } else {
+    toast.error("An error occurred and could not create a copy of this project")
+  }
+}
+
 </script>
 
 <template>
@@ -119,7 +133,7 @@ function setVideoUrl(url: string) {
     <MenubarMenu>
       <MenubarTrigger>Project</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem><Copy />Create copy</MenubarItem>
+        <MenubarItem @click="openCopyDialog = true"><Copy />Create copy</MenubarItem>
         <MenubarItem><Trash />Delete project</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
@@ -128,4 +142,8 @@ function setVideoUrl(url: string) {
   <ExportFilenameDialog :open="openExportAsModal" @close="openExportAsModal = false" @confirm="exportFile"/>
   <SetVideoUrlDialog :open="openSetVideoUrlModal" @close="openSetVideoUrlModal = false" @confirm="setVideoUrl"/>
   <ImportSubtitlesDialog :open="openImportModal" @close="openImportModal = false" @subtitlesUploaded="setSubtitles"/>
+  <AlertDialog :open="openCopyDialog" @close="openCopyDialog = false" @confirm="copyProject">
+    <template #title>Copy project</template>
+    Would you like to create a copy of this project and its settings?
+  </AlertDialog>
 </template>

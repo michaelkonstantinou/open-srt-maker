@@ -39,6 +39,17 @@ import TheBaseLayout from "@/layout/TheBaseLayout.vue";
           to demonstrate an example of VueJS integrated with VideoJS for live subtitle editing. However, if you are
           interested in developing a full working application out of it, please let me know.
         </p>
+
+        <h1 class="text-3xl font-bold text-gray-800">Known limitations</h1>
+        <p class="text-gray-600 text-left leading-relaxed">
+          This is demo application and not a complete application. However, even if you are using this project for learning purposes,
+          you might need to pay attention to the following limitations:
+        </p>
+        <ol class="text-gray-600 text-left leading-relaxed">
+          <li>-> Routes for projects require a slug... but not validation is made to keep the slug unique</li>
+          <li>-> Slug is only generated when the project is created... but not when the project's name is updated</li>
+          <li>-> There are no tests for the project</li>
+        </ol>
       </div>
     </div>
 

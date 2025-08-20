@@ -7,15 +7,44 @@ import SubtitleItem from "@/types/SubtitleItem.ts";
 export const useProjectsStore = defineStore('projects', () => {
     const projects: Ref<OpenSRTProject[]> = ref([]);
 
+    /**
+     * The function adds an empty project to the application.
+     * It is important to keep this function and to keep it asynchronous, as this would be required in case
+     * the data will be fetched by an API
+     */
     const init = async () => {
         const items = new Array(new SubtitleItem(1000, 10000, "Made using OpenSRTMaker", 1))
         const project: OpenSRTProject = new OpenSRTProject(1, "Untitled Project", items, "https://vjs.zencdn.net/v/oceans.mp4");
         projects.value.push(project)
     }
 
+    /**
+     * Searches the store for 1 project instance that contains the given slug
+     * Returns null if no such project is found.
+     *
+     * @param slug
+     */
     const getBySlug = (slug: string): OpenSRTProject | null => {
         return projects.value.find(item => item.slug === slug) ?? null
     }
 
-    return { projects, init, getBySlug }
+    const getById = (id: number): OpenSRTProject | null => {
+        return projects.value.find(item => item.id === id) ?? null
+    }
+
+    const deleteById = (id: number) => {
+        projects.value = projects.value.filter(item => item.id === id)
+    }
+
+    const createCopy = (id: number): boolean => {
+        const projectToCopy = getById(id)
+        if (projectToCopy === null) {
+            return false
+        }
+
+        projects.value.push(projectToCopy.copy(id))
+        return true
+    }
+
+    return { projects, init, getBySlug, deleteById, createCopy }
 })
